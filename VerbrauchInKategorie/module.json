@@ -1,0 +1,12 @@
+{
+    "id": "{51CA1560-4725-A7F2-A449-94B7812E1986}",
+    "name": "Verbrauch in Kategorie",
+    "type": 3,
+    "vendor": "",
+    "aliases": [],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "VIK",
+    "url": "https://www.symcon.de"
+}
