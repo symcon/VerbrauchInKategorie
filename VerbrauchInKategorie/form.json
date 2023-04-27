@@ -1,5 +1,59 @@
 {
-    "elements": [],
-    "actions": [],
+    "elements": [
+        {
+            "type": "RowLayout",
+            "items": [
+                {
+                    "type": "CheckBox",
+                    "caption": "Enable cyclic calculation",
+                    "name": "CheckIntervall",
+                    "onChange": "ViK_UIVisible($id, $CheckIntervall);"
+                },
+                {
+                    "type": "NumberSpinner",
+                    "suffix": " Minutes",
+                    "caption": "Intervall",
+                    "name": "Intervall",
+                    "minimum": 0,
+                    "visible": false
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "name": "Sources",
+            "caption": "Sources",
+            "add": true,
+            "delete": true,
+            "columns": [
+                {
+                    "caption": "Source variable",
+                    "name": "SourceVariable",
+                    "width": "200px",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "requiredLogging": 1
+                    }
+                },
+                {
+                    "caption": "Category",
+                    "name": "Category",
+                    "width": "auto",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Button",
+            "onClick": "ViK_CalculateConsumption($id);",
+            "caption": "Click me"
+        }
+    ],
     "status": []
 }
