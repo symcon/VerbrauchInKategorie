@@ -18,7 +18,7 @@ class VerbrauchInKategorie extends IPSModule
         $this->RegisterPropertyBoolean('CheckIntervall', false);
         $this->RegisterPropertyInteger('Intervall', 0);
 
-        $this->RegisterTimer('UpdateCalculation', 0, 'ViK_CalculateConsumption($IPS_[\'TARGET\']);');
+        $this->RegisterTimer('UpdateCalculation', 0, 'VIK_CalculateConsumption($_IPS[\'TARGET\']);');
     }
 
     public function Destroy()
