@@ -1,5 +1,5 @@
 # Verbrauch in Kategorie
-Beschreibung des Moduls.
+Berechnet den Verbrauch in Prozent pro freiwahlbarer Kategorie nach angegebener Start- und Endzeit. 
 
 ### Inhaltsverzeichnis
 
@@ -13,16 +13,16 @@ Beschreibung des Moduls.
 
 ### 1. Funktionsumfang
 
-*
+* Auswahl mehrer Variablen
+* Freitext für Kategorie 
 
 ### 2. Voraussetzungen
 
-- IP-Symcon ab Version 6.0
+- IP-Symcon ab Version 6.3
 
 ### 3. Software-Installation
 
 * Über den Module Store das 'Verbrauch in Kategorie'-Modul installieren.
-* Alternativ über das Module Control folgende URL hinzufügen
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
@@ -31,37 +31,26 @@ Beschreibung des Moduls.
 
 __Konfigurationsseite__:
 
-Name     | Beschreibung
--------- | ------------------
-         |
-         |
+Name                            | Beschreibung
+------------------------------- | ------------------
+Zyklische Berechnung aktivieren | Aktiviert zyklisch die Berechnung
+Intervall                       | Intervall in welchem die Berechnung ausgeführt wird
+Quellen                         | Liste der Variablen und Kategorien
 
-### 5. Statusvariablen und Profile
+### 5. Statusvariablen
 
 Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
 
 #### Statusvariablen
 
-Name   | Typ     | Beschreibung
------- | ------- | ------------
-       |         |
-       |         |
-
-#### Profile
-
-Name   | Typ
------- | -------
-       |
-       |
-
-### 6. WebFront
-
-Die Funktionalität, die das Modul im WebFront bietet.
+Name      | Typ     | Beschreibung
+--------- | ------- | ------------
+Kategorie | Float   | Pro Kategorie wird eine Variable angelegt, in welchem der Prozentuale Verbrauch angezeigt wird. 
 
 ### 7. PHP-Befehlsreferenz
 
-`boolean VIK_BeispielFunktion(integer $InstanzID);`
+`boolean VIK_CalculateConsumption(integer $InstanzID);`
 Erklärung der Funktion.
 
 Beispiel:
-`VIK_BeispielFunktion(12345);`
+`VIK_CalculateConsumption(12345);`

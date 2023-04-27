@@ -42,12 +42,17 @@ class VerbrauchInKategorie extends IPSModule
         //Create the Variables
         foreach ($source as $key => $row) {
             $category = $row['Category'];
+            if($category == ''){
+                $this->SetStatus(200);
+                return;
+            }
             //Add Categories if they aren't under the instance
             if (!in_array($category, $currentCategories)) {
-                $this->MaintainVariable('Cat' . str_replace(' ', '', $category), $category, VARIABLETYPE_FLOAT, '~Progress', 0, true);
+                $this->MaintainVariable('Category' . str_replace(' ', '', $category), $category, VARIABLETYPE_FLOAT, '~Progress', 0, true);
             }
-            $source[$key]['Category'] = 'Cat' . str_replace(' ', '', $category);
+            $source[$key]['Category'] = 'Category' . str_replace(' ', '', $category);
         }
+        $this->SetStatus(102);
         //remove Categories that aren't lists
         $notListed = array_diff($currentCategories, array_column($source, 'Category'));
         foreach ($notListed as $key => $value) {
@@ -76,8 +81,14 @@ class VerbrauchInKategorie extends IPSModule
 
         //Get Values
         foreach ($sources as $key => $source) {
-            $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $this->GetValue('StartTime'), $this->GetValue('EndTime'), 0);
+            if(IPS_VariableExists($source['SourceVariable'])){
+                $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $this->GetValue('StartTime'), $this->GetValue('EndTime'), 0);
             $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
+            }else{
+                $this->SetStatus(201);
+                return;
+            }
+            
         }
         $totalConsumption = array_sum(array_column($sources, 'Value'));
 
@@ -94,9 +105,9 @@ class VerbrauchInKategorie extends IPSModule
         foreach ($categories as $category => $value) {
             if ($totalConsumption > 0) {
                 $percent = ($value / $totalConsumption) * 100;
-                $this->SetValue('Cat' . str_replace(' ', '', $category), $percent);
+                $this->SetValue('Category' . str_replace(' ', '', $category), $percent);
             } else {
-                $this->SetValue('Cat' . str_replace(' ', '', $category), 0);
+                $this->SetValue('Category' . str_replace(' ', '', $category), 0);
             }
         }
 

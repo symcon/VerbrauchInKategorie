@@ -1,8 +1,14 @@
 {
     "translations": {
         "de": {
-            "Translation 1": "Übersetzung 1",
-            "Translation 2": "Übersetzung 2"
+            "Start time": "Startzeit",
+            "End time": "Endzeit",
+            "Enable cyclic calculation": "Zyklische Berechnung aktivieren",
+            "Source" : "Quelle",
+            "Source variable": "Quellvariable",
+            "Category": "Kategorie",
+            "A Category is missing": "Eine Kategorie fehlt",
+            "A variable is invalid" : "Eine Variable ist nicht valide"
         }
     }
 }
