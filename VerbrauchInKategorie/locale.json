@@ -8,7 +8,8 @@
             "Source variable": "Quellvariable",
             "Category": "Kategorie",
             "A Category is missing": "Eine Kategorie fehlt",
-            "A variable is invalid" : "Eine Variable ist nicht valide"
+            "A variable is invalid" : "Eine Variable ist nicht valide",
+            "Minutes": "Minuten"
         }
     }
 }
