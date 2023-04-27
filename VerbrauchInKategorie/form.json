@@ -48,10 +48,17 @@
             ]
         }
     ],
-    "actions": [
-    ],
+    "actions": [],
     "status": [
-        { "code": 200, "icon": "error", "caption": "A Category is missing" },
-        { "code": 201, "icon": "error", "caption": "A variable is invalid" }
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "A Category is missing"
+        },
+        {
+            "code": 201,
+            "icon": "error",
+            "caption": "A variable is invalid"
+        }
     ]
 }

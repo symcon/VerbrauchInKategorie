@@ -42,7 +42,7 @@ class VerbrauchInKategorie extends IPSModule
         //Create the Variables
         foreach ($source as $key => $row) {
             $category = $row['Category'];
-            if($category == ''){
+            if ($category == '') {
                 $this->SetStatus(200);
                 return;
             }
@@ -69,7 +69,7 @@ class VerbrauchInKategorie extends IPSModule
         return json_encode($form);
     }
 
-    public function UIVisible($value)
+    public function UIVisible(bool $value)
     {
         $this->UpdateFormField('Intervall', 'visible', $value);
     }
@@ -81,14 +81,13 @@ class VerbrauchInKategorie extends IPSModule
 
         //Get Values
         foreach ($sources as $key => $source) {
-            if(IPS_VariableExists($source['SourceVariable'])){
+            if (IPS_VariableExists($source['SourceVariable'])) {
                 $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $this->GetValue('StartTime'), $this->GetValue('EndTime'), 0);
-            $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
-            }else{
+                $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
+            } else {
                 $this->SetStatus(201);
                 return;
             }
-            
         }
         $totalConsumption = array_sum(array_column($sources, 'Value'));
 
