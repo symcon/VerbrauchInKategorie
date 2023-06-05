@@ -46,6 +46,8 @@ Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzeln
 Name      | Typ     | Beschreibung
 --------- | ------- | ------------
 Kategorie | Float   | Pro Kategorie wird eine Variable angelegt, in welchem der Prozentuale Verbrauch angezeigt wird. 
+Startzeit | Integer | Zeitpunkt von wann die Berechnung starten soll
+Endzeit   | Integer | Zeitpunkt bis wann die Berechnung gehen soll
 
 ### 7. PHP-Befehlsreferenz
 

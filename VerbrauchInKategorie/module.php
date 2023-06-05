@@ -11,14 +11,30 @@ class VerbrauchInKategorie extends IPSModule
         //Never delete this line!
         parent::Create();
 
-        $this->RegisterVariableInteger('StartTime', $this->Translate('Start Time'), '~UnixTimestamp', 0);
-        $this->RegisterVariableInteger('EndTime', $this->Translate('End Time'), '~UnixTimestamp', 1);
-
-        $this->RegisterPropertyString('Sources', '[]');
+        //Register Variables
+        $this->RegisterVariableInteger('StartTime', $this->Translate('Start Time'), '~UnixTimestamp', 100);
+        $this->EnableAction('StartTime');
+        $this->RegisterVariableInteger('EndTime', $this->Translate('End Time'), '~UnixTimestamp', 101);
+        $this->EnableAction('EndTime');
+        
+        //Register Properties
+        $this->RegisterPropertyString('SourceVariables', '[]');
         $this->RegisterPropertyBoolean('CheckIntervall', false);
         $this->RegisterPropertyInteger('Intervall', 0);
 
+        //For compatibility check if the ProgressProfile exist
+        if(!IPS_VariableProfileExists('~Progress')){
+            IPS_CreateVariableProfile('~Progress', VARIABLETYPE_FLOAT);
+            IPS_SetVariableProfileValues('~Progress', 0, 100, 0.1);
+            IPS_SetVariableProfileDigits('~Progress', 1);
+            IPS_SetVariableProfileText('~Progress', '', ' %');
+        }
+
         $this->RegisterTimer('UpdateCalculation', 0, 'VIK_CalculateConsumption($_IPS[\'TARGET\']);');
+        
+        //set an initial time
+        $this->SetValue('StartTime', strtotime('yesterday'));
+        $this->SetValue('EndTime', time());
     }
 
     public function Destroy()
@@ -32,7 +48,7 @@ class VerbrauchInKategorie extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
 
-        $source = json_decode($this->ReadPropertyString('Sources'), true);
+        $source = json_decode($this->ReadPropertyString('SourceVariables'), true);
         $currentCategories = array_diff(IPS_GetChildrenIDs($this->InstanceID), [$this->GetIDForIdent('StartTime'), $this->GetIDForIdent('EndTime')]);
         //change IDs to Idents
         foreach ($currentCategories as $key => $category) {
@@ -77,18 +93,29 @@ class VerbrauchInKategorie extends IPSModule
     public function CalculateConsumption()
     {
         $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        $sources = json_decode($this->ReadPropertyString('Sources'), true);
+        $sources = json_decode($this->ReadPropertyString('SourceVariables'), true);
+
+        //Validate that the startTime is lower than endTime
+        $startTime = $this->GetValue('StartTime');
+        $endTime = $this->GetValue('EndTime');
+        if($endTime < $startTime){
+            $this->SetStatus(202);
+            return;
+        }else {
+            $this->SetStatus(102);
+        }
 
         //Get Values
         foreach ($sources as $key => $source) {
             if (IPS_VariableExists($source['SourceVariable'])) {
-                $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $this->GetValue('StartTime'), $this->GetValue('EndTime'), 0);
+                $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $startTime, $endTime, 0);
                 $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
             } else {
                 $this->SetStatus(201);
                 return;
             }
         }
+        $this->SetStatus(102);
         $totalConsumption = array_sum(array_column($sources, 'Value'));
 
         //Get Values per Category

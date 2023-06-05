@@ -6,5 +6,5 @@
 
 Folgende Module beinhaltet das Verbrauch in Kategorie Repository:
 
-- __Verbrauch in Kategorie__ ([Dokumentation](Verbrauch%20in%20Kategorie))  
+- __Verbrauch in Kategorie__ ([Dokumentation](VerbrauchInKategorie))  
 	Zeigt den Verbrauch in Prozent in Kategorie.
