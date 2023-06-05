@@ -132,7 +132,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
          * categoryOne = 270
          * categoryTwo = 225
          * categoryThree = 100
-         * 
+         *
          * percent categoryOne = (270/595)*100 = ~45,37
          * percent categoryTwo = (225/595)* 100 = ~37,81%
          * percent categoryThree = (100/595)*100 = ~16,80%
