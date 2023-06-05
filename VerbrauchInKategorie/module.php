@@ -1,10 +1,10 @@
 <?php
 
 declare(strict_types=1);
-//include_once __DIR__ . '/timetest.php';
+include_once __DIR__ . '/timetest.php';
 class VerbrauchInKategorie extends IPSModule
 {
-    //use TestTime;
+    use TestTime;
 
     public function Create()
     {
@@ -16,14 +16,14 @@ class VerbrauchInKategorie extends IPSModule
         $this->EnableAction('StartTime');
         $this->RegisterVariableInteger('EndTime', $this->Translate('End Time'), '~UnixTimestamp', 101);
         $this->EnableAction('EndTime');
-        
+
         //Register Properties
         $this->RegisterPropertyString('SourceVariables', '[]');
         $this->RegisterPropertyBoolean('CheckIntervall', false);
         $this->RegisterPropertyInteger('Intervall', 0);
 
         //For compatibility check if the ProgressProfile exist
-        if(!IPS_VariableProfileExists('~Progress')){
+        if (!IPS_VariableProfileExists('~Progress')) {
             IPS_CreateVariableProfile('~Progress', VARIABLETYPE_FLOAT);
             IPS_SetVariableProfileValues('~Progress', 0, 100, 0.1);
             IPS_SetVariableProfileDigits('~Progress', 1);
@@ -31,10 +31,10 @@ class VerbrauchInKategorie extends IPSModule
         }
 
         $this->RegisterTimer('UpdateCalculation', 0, 'VIK_CalculateConsumption($_IPS[\'TARGET\']);');
-        
+
         //set an initial time
         $this->SetValue('StartTime', strtotime('yesterday'));
-        $this->SetValue('EndTime', time());
+        $this->SetValue('EndTime', $this->getTime());
     }
 
     public function Destroy()
@@ -98,10 +98,10 @@ class VerbrauchInKategorie extends IPSModule
         //Validate that the startTime is lower than endTime
         $startTime = $this->GetValue('StartTime');
         $endTime = $this->GetValue('EndTime');
-        if($endTime < $startTime){
+        if ($endTime < $startTime) {
             $this->SetStatus(202);
             return;
-        }else {
+        } else {
             $this->SetStatus(102);
         }
 
