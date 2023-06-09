@@ -21,8 +21,8 @@
         },
         {
             "type": "List",
-            "name": "Sources",
-            "caption": "Sources",
+            "name": "SourceVariables",
+            "caption": "Source variables",
             "add": true,
             "delete": true,
             "columns": [
@@ -48,17 +48,28 @@
             ]
         }
     ],
-    "actions": [],
+    "actions": [
+        {
+            "type": "Button",
+            "onClick": "Vik_CalculateConsumption($id);",
+            "caption": "Recalculate"
+        }
+    ],
     "status": [
         {
             "code": 200,
             "icon": "error",
-            "caption": "A Category is missing"
+            "caption": "A category is missing"
         },
         {
             "code": 201,
             "icon": "error",
             "caption": "A variable is invalid"
+        },
+        {
+            "code": 202,
+            "icon": "error",
+            "caption": "The start time ist greater then the end time"
         }
     ]
 }

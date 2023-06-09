@@ -4,9 +4,9 @@
     "author": "Symcon GmbH",
     "url": "https://github.com/symcon/VerbrauchInKategorie",
     "compatibility": {
-        "version": "6.0"
+        "version": "6.4"
     },
-    "version": "1.0",
+    "version": "1.1",
     "build": 0,
     "date": 0
 }
