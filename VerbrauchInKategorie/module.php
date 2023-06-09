@@ -109,6 +109,7 @@ class VerbrauchInKategorie extends IPSModule
         foreach ($sources as $key => $source) {
             if (IPS_VariableExists($source['SourceVariable'])) {
                 $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $startTime, $endTime, 0);
+                $this->SendDebug('Raw Values of ' . $source['SourceVariable'], print_r($loggedValue, true), 0);
                 $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
             } else {
                 $this->SetStatus(201);

@@ -8,6 +8,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
 {
     public function testCalculationTwoCategoriesTwoVariables()
     {
+        IPS_EnableDebug($this->categoryInstanceID, 6000);
         //Variables
         SetValue(IPS_GetObjectIDByIdent('StartTime', $this->categoryInstanceID), 989884799);
         SetValue(IPS_GetObjectIDByIdent('EndTime', $this->categoryInstanceID), 989884921);
@@ -59,6 +60,8 @@ class VerbrauchInKategorieBaseTest extends TestBase
 
     public function testWithSevenVariablesAndThreeCategories()
     {
+        IPS_EnableDebug($this->categoryInstanceID, 6000);
+
         //Variables
         SetValue(IPS_GetObjectIDByIdent('StartTime', $this->categoryInstanceID), 989884799);
         SetValue(IPS_GetObjectIDByIdent('EndTime', $this->categoryInstanceID), 989884921);
