@@ -12,9 +12,9 @@ class VerbrauchInKategorie extends IPSModule
         parent::Create();
 
         //Register Variables
-        $this->RegisterVariableInteger('StartTime', $this->Translate('Start Time'), '~UnixTimestamp', 100);
+        $this->RegisterVariableInteger('StartTime', $this->Translate('Start Time'), '~UnixTimestampDate', 100);
         $this->EnableAction('StartTime');
-        $this->RegisterVariableInteger('EndTime', $this->Translate('End Time'), '~UnixTimestamp', 101);
+        $this->RegisterVariableInteger('EndTime', $this->Translate('End Time'), '~UnixTimestampDate', 101);
         $this->EnableAction('EndTime');
 
         //Register Properties
@@ -78,6 +78,19 @@ class VerbrauchInKategorie extends IPSModule
         $this->CalculateConsumption();
     }
 
+    public function RequestAction($Ident, $Value)
+    {
+        switch ($Ident) {
+            case 'StartTime':
+            case 'EndTime':
+                $this->SetValue($Ident, $Value);
+                break;
+            default:
+                $this->SendDebug($Ident, 'You try to set an automatic variable', 0);
+                break;
+        }
+    }
+
     public function GetConfigurationForm()
     {
         $form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
@@ -98,7 +111,7 @@ class VerbrauchInKategorie extends IPSModule
         //Validate that the startTime is lower than endTime
         $startTime = $this->GetValue('StartTime');
         $endTime = $this->GetValue('EndTime');
-        if ($endTime < $startTime) {
+        if ($endTime > 0 && $endTime < $startTime) {
             $this->SetStatus(202);
             return;
         } else {
@@ -108,9 +121,12 @@ class VerbrauchInKategorie extends IPSModule
         //Get Values
         foreach ($sources as $key => $source) {
             if (IPS_VariableExists($source['SourceVariable'])) {
-                $loggedValue = AC_GetLoggedValues($archiveID, $source['SourceVariable'], $startTime, $endTime, 0);
-                $this->SendDebug('Raw Values of ' . $source['SourceVariable'], print_r($loggedValue, true), 0);
-                $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Value'));
+                $loggedValue = AC_GetAggregatedValues($archiveID, $source['SourceVariable'], 1 /*Daily*/, $startTime, $endTime, 0);
+                $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Avg'));
+
+                //Debugs
+                //$this->SendDebug('Aggregated Values of ' . $source['SourceVariable'], print_r($loggedValue, true), 0);
+                $this->SendDebug('Sum of ' . $source['SourceVariable'], '' . $sources[$key]['Value'], 0);
             } else {
                 $this->SetStatus(201);
                 return;
@@ -118,6 +134,9 @@ class VerbrauchInKategorie extends IPSModule
         }
         $this->SetStatus(102);
         $totalConsumption = array_sum(array_column($sources, 'Value'));
+
+        //Debugs
+        $this->SendDebug('Total Consumption', '' . $totalConsumption, 0);
 
         //Get Values per Category
         $categories = [];

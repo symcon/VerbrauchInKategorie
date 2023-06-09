@@ -5,7 +5,7 @@ declare(strict_types=1);
 if (defined('PHPUNIT_TESTSUITE')) {
     trait TestTime
     {
-        private $currentTime = 989884800;
+        private $currentTime = 989884800; //May 15 2001
 
         public function setTime(int $Time)
         {

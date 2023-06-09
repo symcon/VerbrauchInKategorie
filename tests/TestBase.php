@@ -32,10 +32,13 @@ class TestBase extends TestCase
         IPS\ModuleLoader::loadLibrary(__DIR__ . '/../library.json');
 
         //Register required profiles
-        IPS_CreateVariableProfile('~UnixTimestamp', VAR_INT);
-
+        if (!IPS_VariableProfileExists('~UnixTimestampDate')) {
+            IPS_CreateVariableProfile('~UnixTimestampDate', VARIABLETYPE_INTEGER);
+        }
         $this->archiveControlID = IPS_CreateInstance('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
         $this->categoryInstanceID = IPS_CreateInstance('{51CA1560-4725-A7F2-A449-94B7812E1986}');
+
+        
 
         parent::setUp();
     }
