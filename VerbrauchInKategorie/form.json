@@ -50,7 +50,7 @@
     ],
     "actions": [
         {
-            "type":"Button",
+            "type": "Button",
             "onClick": "Vik_CalculateConsumption($id);",
             "caption": "Recalculate"
         }
