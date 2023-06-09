@@ -48,7 +48,13 @@
             ]
         }
     ],
-    "actions": [],
+    "actions": [
+        {
+            "type":"Button",
+            "onClick": "Vik_CalculateConsumption($id);",
+            "caption": "Recalculate"
+        }
+    ],
     "status": [
         {
             "code": 200,

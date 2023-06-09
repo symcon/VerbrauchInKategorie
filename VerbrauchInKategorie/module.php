@@ -84,6 +84,7 @@ class VerbrauchInKategorie extends IPSModule
             case 'StartTime':
             case 'EndTime':
                 $this->SetValue($Ident, $Value);
+                $this->CalculateConsumption();
                 break;
             default:
                 $this->SendDebug($Ident, 'You try to set an automatic variable', 0);
