@@ -1,8 +1,8 @@
 {
     "translations": {
         "de": {
-            "Start time": "Startzeit",
-            "End time": "Endzeit",
+            "Start Time": "Startzeit",
+            "End Time": "Endzeit",
             "Enable cyclic calculation": "Zyklische Berechnung aktivieren",
             "Source variables": "Quellevariablen",
             "Source variable": "Quellvariable",

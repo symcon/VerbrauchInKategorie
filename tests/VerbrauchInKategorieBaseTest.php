@@ -269,7 +269,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableTwo, 1, $aggregationPeriodDay);
 
@@ -281,7 +281,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableThree, 1, $aggregationPeriodDay);
 
@@ -293,7 +293,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableFour, 1, $aggregationPeriodDay);
 
@@ -305,7 +305,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableFive, 1, $aggregationPeriodDay);
 
@@ -317,7 +317,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableSix, 1, $aggregationPeriodDay);
 
@@ -329,7 +329,7 @@ class VerbrauchInKategorieBaseTest extends TestBase
             'MaxTime'   => 0,
             'Min'       => 0,
             'MinTime'   => 0,
-            'TimeStamp' => strtotime('May 14 2001 00:00:00'),
+            'TimeStamp' => strtotime('May 13 2001 00:00:00'),
         ];
         AC_StubsAddAggregatedValues($this->archiveControlID, $sourceVariableSeven, 1, $aggregationPeriodDay);
 
@@ -349,9 +349,9 @@ class VerbrauchInKategorieBaseTest extends TestBase
         IPS_ApplyChanges($this->categoryInstanceID);
 
         $this->assertEquals(102, IPS_GetInstance($this->categoryInstanceID)['InstanceStatus']);
-       // $this->assertEqualsWithDelta(45.61, GetValue(IPS_GetObjectIDByIdent('CategoryOne', $this->categoryInstanceID)), 0.01);
-       // $this->assertEqualsWithDelta(38.15, GetValue(IPS_GetObjectIDByIdent('CategoryTwo', $this->categoryInstanceID)), 0.01);
-      //  $this->assertEqualsWithDelta(16.22, GetValue(IPS_GetObjectIDByIdent('CategoryThree', $this->categoryInstanceID)), 0.01);
+        $this->assertEqualsWithDelta(45.61, GetValue(IPS_GetObjectIDByIdent('CategoryOne', $this->categoryInstanceID)), 0.01);
+        $this->assertEqualsWithDelta(38.15, GetValue(IPS_GetObjectIDByIdent('CategoryTwo', $this->categoryInstanceID)), 0.01);
+        $this->assertEqualsWithDelta(16.22, GetValue(IPS_GetObjectIDByIdent('CategoryThree', $this->categoryInstanceID)), 0.01);
 
         /**
          * Manuel Calculation

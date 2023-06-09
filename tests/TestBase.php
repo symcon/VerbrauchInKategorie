@@ -38,8 +38,6 @@ class TestBase extends TestCase
         $this->archiveControlID = IPS_CreateInstance('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
         $this->categoryInstanceID = IPS_CreateInstance('{51CA1560-4725-A7F2-A449-94B7812E1986}');
 
-        
-
         parent::setUp();
     }
 }
