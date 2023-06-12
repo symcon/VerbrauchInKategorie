@@ -31,10 +31,6 @@ class VerbrauchInKategorie extends IPSModule
         }
 
         $this->RegisterTimer('UpdateCalculation', 0, 'VIK_CalculateConsumption($_IPS[\'TARGET\']);');
-
-        //set an initial time
-        $this->SetValue('StartTime', strtotime('yesterday'));
-        $this->SetValue('EndTime', $this->getTime());
     }
 
     public function Destroy()
