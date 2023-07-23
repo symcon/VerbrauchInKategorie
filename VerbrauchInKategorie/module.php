@@ -66,7 +66,7 @@ class VerbrauchInKategorie extends IPSModule
         foreach ($sourceVariables as $row) {
             // sanitize string category to A-Z, a-z, 0-9 and _
             $ident = $this->sanitizeNameToIdent($row['Category']);
-            $this->RegisterVariableFloat($ident, $row['Category'], '~Progress', 0);
+            $this->RegisterVariableFloat($ident, $row['Category'], 'Progress.CIC', 0);
 
             $remainingCategories = array_diff($remainingCategories, [$ident]);
         }
