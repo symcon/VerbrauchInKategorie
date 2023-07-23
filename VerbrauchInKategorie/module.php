@@ -95,7 +95,7 @@ class VerbrauchInKategorie extends IPSModule
                 $this->CalculateConsumption();
                 break;
             default:
-                $this->SendDebug($Ident, 'You try to set an automatic variable', 0);
+                $this->SendDebug($Ident, strval('You try to set an automatic variable'), 0);
                 break;
         }
     }
@@ -131,12 +131,12 @@ class VerbrauchInKategorie extends IPSModule
         foreach ($sourceVariables as &$row) {
             $loggedValue = AC_GetAggregatedValues($archiveID, $row['SourceVariable'], 1 /*Daily*/, $startTime, $endTime, 0);
             $row['Value'] = array_sum(array_column($loggedValue, 'Avg'));
-            $this->SendDebug('Sum of ' . $row['SourceVariable'], $row['Value'], 0);
+            $this->SendDebug('Sum of ' . $row['SourceVariable'], strval($row['Value']), 0);
         }
 
         // calculate the total
         $totalConsumption = array_sum(array_column($sourceVariables, 'Value'));
-        $this->SendDebug('Total Consumption', $totalConsumption, 0);
+        $this->SendDebug('Total Consumption', strval($totalConsumption), 0);
 
         // calculate values per category
         $categories = [];
