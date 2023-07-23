@@ -19,15 +19,14 @@ class VerbrauchInKategorie extends IPSModule
 
         //Register Properties
         $this->RegisterPropertyString('SourceVariables', '[]');
-        $this->RegisterPropertyBoolean('CheckIntervall', false);
-        $this->RegisterPropertyInteger('Intervall', 0);
+        $this->RegisterPropertyInteger('Interval', 0);
 
-        //For compatibility check if the ProgressProfile exist
-        if (!IPS_VariableProfileExists('~Progress')) {
-            IPS_CreateVariableProfile('~Progress', VARIABLETYPE_FLOAT);
-            IPS_SetVariableProfileValues('~Progress', 0, 100, 0.1);
-            IPS_SetVariableProfileDigits('~Progress', 1);
-            IPS_SetVariableProfileText('~Progress', '', ' %');
+        //For compatibility check if our profile exist
+        if (!IPS_VariableProfileExists('Progress.CIC')) {
+            IPS_CreateVariableProfile('Progress.CIC', VARIABLETYPE_FLOAT);
+            IPS_SetVariableProfileValues('Progress.CIC', 0, 100, 0.1);
+            IPS_SetVariableProfileDigits('Progress.CIC', 1);
+            IPS_SetVariableProfileText('Progress.CIC', '', ' %');
         }
 
         $this->RegisterTimer('UpdateCalculation', 0, 'VIK_CalculateConsumption($_IPS[\'TARGET\']);');
@@ -44,33 +43,46 @@ class VerbrauchInKategorie extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
 
-        $source = json_decode($this->ReadPropertyString('SourceVariables'), true);
-        $currentCategories = array_diff(IPS_GetChildrenIDs($this->InstanceID), [$this->GetIDForIdent('StartTime'), $this->GetIDForIdent('EndTime')]);
-        //change IDs to Idents
-        foreach ($currentCategories as $key => $category) {
-            $currentCategories[$key] = IPS_GetObject($category)['ObjectIdent'];
-        }
+        $sourceVariables = json_decode($this->ReadPropertyString('SourceVariables'), true);
 
-        //Create the Variables
-        foreach ($source as $key => $row) {
-            $category = $row['Category'];
-            if ($category == '') {
+        // make sanity check if category names are defined
+        foreach ($sourceVariables as $row) {
+            if (!$row['Category']) {
                 $this->SetStatus(200);
                 return;
             }
-            //Add Categories if they aren't under the instance
-            if (!in_array($category, $currentCategories)) {
-                $this->MaintainVariable('Category' . str_replace(' ', '', $category), $category, VARIABLETYPE_FLOAT, '~Progress', 0, true);
-            }
-            $source[$key]['Category'] = 'Category' . str_replace(' ', '', $category);
-        }
-        $this->SetStatus(102);
-        //remove Categories that aren't lists
-        $notListed = array_diff($currentCategories, array_column($source, 'Category'));
-        foreach ($notListed as $key => $value) {
-            $this->UnregisterVariable($value);
         }
 
+        // make array of current categories which will be removed in the next block, if still valid
+        $remainingCategories = [];
+        foreach (IPS_GetChildrenIDs($this->InstanceID) as $id) {
+            $remainingCategories[] = IPS_GetObject($id)['ObjectIdent'];
+        }
+
+        // remove special ident's which shall never be removed
+        $remainingCategories = array_diff($remainingCategories, ['StartTime', 'EndTime']);
+
+        // create the category variables
+        foreach ($sourceVariables as $row) {
+            // sanitize string category to A-Z, a-z, 0-9 and _
+            $ident = $this->sanitizeNameToIdent($row['Category']);
+            $this->RegisterVariableFloat($ident, $row['Category'], '~Progress', 0);
+
+            $remainingCategories = array_diff($remainingCategories, [$ident]);
+        }
+
+        // remove categories that aren't in the list anymore
+        foreach ($remainingCategories as $ident) {
+            $this->UnregisterVariable($ident);
+        }
+
+        // set instance active
+        $this->SetStatus(102);
+
+        // update the Timer
+        $this->SetTimerInterval('UpdateCalculation', $this->ReadPropertyInteger('Interval') * 60 * 1000);
+
+        // make initial calculation
         $this->CalculateConsumption();
     }
 
@@ -88,75 +100,66 @@ class VerbrauchInKategorie extends IPSModule
         }
     }
 
-    public function GetConfigurationForm()
-    {
-        $form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
-        $form['elements'][0]['items'][1]['visible'] = $this->ReadPropertyBoolean('CheckIntervall'); //Visible of Intervall
-        return json_encode($form);
-    }
-
-    public function UIVisible(bool $value)
-    {
-        $this->UpdateFormField('Intervall', 'visible', $value);
-    }
-
     public function CalculateConsumption()
     {
         $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-        $sources = json_decode($this->ReadPropertyString('SourceVariables'), true);
 
-        //Validate that the startTime is lower than endTime
+        $sourceVariables = json_decode($this->ReadPropertyString('SourceVariables'), true);
+
+        // validate that the startTime is lower than endTime
         $startTime = $this->GetValue('StartTime');
         $endTime = $this->GetValue('EndTime');
         if ($endTime > 0 && $endTime < $startTime) {
+            echo $this->Translate('The start time ist greater then the end time');
             $this->SetStatus(202);
             return;
-        } else {
-            $this->SetStatus(102);
         }
 
-        //Get Values
-        foreach ($sources as $key => $source) {
-            if (IPS_VariableExists($source['SourceVariable'])) {
-                $loggedValue = AC_GetAggregatedValues($archiveID, $source['SourceVariable'], 1 /*Daily*/, $startTime, $endTime, 0);
-                $sources[$key]['Value'] = array_sum(array_column($loggedValue, 'Avg'));
-
-                //Debugs
-                //$this->SendDebug('Aggregated Values of ' . $source['SourceVariable'], print_r($loggedValue, true), 0);
-                $this->SendDebug('Sum of ' . $source['SourceVariable'], '' . $sources[$key]['Value'], 0);
-            } else {
+        // validate that all variables are valid
+        foreach ($sourceVariables as $row) {
+            if (!IPS_VariableExists($row['SourceVariable'])) {
+                echo $this->Translate('A variable is invalid');
                 $this->SetStatus(201);
                 return;
             }
         }
+
+        // activate instance
         $this->SetStatus(102);
-        $totalConsumption = array_sum(array_column($sources, 'Value'));
 
-        //Debugs
-        $this->SendDebug('Total Consumption', '' . $totalConsumption, 0);
+        // get values from archive
+        foreach ($sourceVariables as &$row) {
+            $loggedValue = AC_GetAggregatedValues($archiveID, $row['SourceVariable'], 1 /*Daily*/, $startTime, $endTime, 0);
+            $row['Value'] = array_sum(array_column($loggedValue, 'Avg'));
+            $this->SendDebug('Sum of ' . $row['SourceVariable'], $row['Value'], 0);
+        }
 
-        //Get Values per Category
+        // calculate the total
+        $totalConsumption = array_sum(array_column($sourceVariables, 'Value'));
+        $this->SendDebug('Total Consumption', $totalConsumption, 0);
+
+        // calculate values per category
         $categories = [];
-        foreach ($sources as $key => $source) {
+        foreach ($sourceVariables as $source) {
             if (!array_key_exists($source['Category'], $categories)) {
                 $categories[$source['Category']] = 0;
             }
             $categories[$source['Category']] += $source['Value'];
         }
 
-        //Calculate the percent
+        // calculate the percent per category
         foreach ($categories as $category => $value) {
+            $ident = $this->sanitizeNameToIdent($category);
             if ($totalConsumption > 0) {
-                $percent = ($value / $totalConsumption) * 100;
-                $this->SetValue('Category' . str_replace(' ', '', $category), $percent);
+                $this->SetValue($ident, ($value / $totalConsumption) * 100);
             } else {
-                $this->SetValue('Category' . str_replace(' ', '', $category), 0);
+                $this->SetValue($ident, 0);
             }
         }
+    }
 
-        //Reset the Timer
-        if ($this->ReadPropertyBoolean('CheckIntervall')) {
-            $this->SetTimerInterval('UpdateCalculation', $this->ReadPropertyInteger('Intervall') * 60 * 1000);
-        }
+    private function sanitizeNameToIdent($name)
+    {
+        return 'Category' . preg_replace('/[^A-Za-z0-9_]/', '', $name);
     }
 }

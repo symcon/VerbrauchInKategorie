@@ -3,13 +3,12 @@
         "de": {
             "Start Time": "Startzeit",
             "End Time": "Endzeit",
-            "Enable cyclic calculation": "Zyklische Berechnung aktivieren",
             "Source variables": "Quellevariablen",
             "Source variable": "Quellvariable",
             "Category": "Kategorie",
             "A category is missing": "Eine Kategorie fehlt",
             "A variable is invalid": "Eine Variable ist nicht valide",
-            "Minutes": "Minuten",
+            "minutes": "Minuten",
             "The start time ist greater then the end time": "Die Startzeit ist größer als die Endzeit",
             "Recalculate": "Neu berechnen"
         }

@@ -1,25 +1,6 @@
 {
     "elements": [
         {
-            "type": "RowLayout",
-            "items": [
-                {
-                    "type": "CheckBox",
-                    "caption": "Enable cyclic calculation",
-                    "name": "CheckIntervall",
-                    "onChange": "ViK_UIVisible($id, $CheckIntervall);"
-                },
-                {
-                    "type": "NumberSpinner",
-                    "suffix": " Minutes",
-                    "caption": "Intervall",
-                    "name": "Intervall",
-                    "minimum": 0,
-                    "visible": false
-                }
-            ]
-        },
-        {
             "type": "List",
             "name": "SourceVariables",
             "caption": "Source variables",
@@ -46,6 +27,14 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "NumberSpinner",
+            "suffix": " minutes",
+            "caption": "Interval",
+            "name": "Interval",
+            "minimum": 0,
+            "visible": false
         }
     ],
     "actions": [

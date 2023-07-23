@@ -33,8 +33,7 @@ __Konfigurationsseite__:
 
 Name                            | Beschreibung
 ------------------------------- | ------------------
-Zyklische Berechnung aktivieren | Aktiviert zyklisch die Berechnung
-Intervall                       | Intervall in welchem die Berechnung ausgeführt wird
+Intervall                       | Intervall, in welchem die Berechnung ausgeführt wird. 0 = Deaktiviert
 Quellen                         | Liste der Variablen und Kategorien
 
 ### 5. Statusvariablen
@@ -45,7 +44,7 @@ Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzeln
 
 Name      | Typ     | Beschreibung
 --------- | ------- | ------------
-Kategorie | Float   | Pro Kategorie wird eine Variable angelegt, in welchem der Prozentuale Verbrauch angezeigt wird. 
+Kategorie | Float   | Pro Kategorie wird eine Variable angelegt, in welchem der Prozentuale Verbrauch angezeigt wird. Der Kategoriename wird intern auf A-Z, a-z, 0-9 und _ (Unterstrich) reduziert. Das bedeutet, dass die Kategorie "Test" und "Test €" ebenfalls auf "Test" kategorisiert werden.   
 Startzeit | Integer | Datum von wann die Berechnung starten soll
 Endzeit   | Integer | Datum bis wann die Berechnung gehen soll
 
