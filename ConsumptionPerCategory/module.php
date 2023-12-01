@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 include_once __DIR__ . '/timetest.php';
-class VerbrauchInKategorie extends IPSModule
+class Consumptionpercategory extends IPSModule
 {
     use TestTime;
 

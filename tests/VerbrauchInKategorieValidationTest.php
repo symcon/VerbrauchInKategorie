@@ -13,6 +13,6 @@ class VerbrauchInKategorieValidationTest extends TestCaseSymconValidation
 
     public function testValidateVerbrauchInKategorieModule(): void
     {
-        $this->validateModule(__DIR__ . '/../VerbrauchInKategorie');
+        $this->validateModule(__DIR__ . '/../ConsumptionPerCategory');
     }
 }
