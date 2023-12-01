@@ -1,6 +1,6 @@
 {
     "id": "{51CA1560-4725-A7F2-A449-94B7812E1986}",
-    "name": "Verbrauch in Kategorie",
+    "name": "Consumption per category",
     "type": 3,
     "vendor": "",
     "aliases": [],
@@ -8,5 +8,5 @@
     "childRequirements": [],
     "implemented": [],
     "prefix": "VIK",
-    "url": "https://github.com/symcon/VerbrauchInKategorie/VerbrauchInKategorie"
+    "url": "https://www.symcon.de/en/service/documentation/module-reference/consumption-per-category/"
 }

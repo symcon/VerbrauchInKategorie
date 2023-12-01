@@ -10,7 +10,9 @@
             "A variable is invalid": "Eine Variable ist nicht valide",
             "minutes": "Minuten",
             "The start time ist greater then the end time": "Die Startzeit ist größer als die Endzeit",
-            "Recalculate": "Neu berechnen"
+            "Recalculate": "Neu berechnen",
+            "https://www.symcon.de/en/service/documentation/module-reference/consumption-per-category/": "https://www.symcon.de/de/service/dokumentation/modulreferenz/verbrauch-in-kategorie/",
+            "Consumption per category": "Verbrauch in Kategorie"
         }
     }
 }
