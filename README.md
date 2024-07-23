@@ -6,5 +6,5 @@
 
 Folgende Module beinhaltet das Verbrauch in Kategorie Repository:
 
-- __Verbrauch in Kategorie__ ([Dokumentation](VerbrauchInKategorie))  
+- __Verbrauch in Kategorie__ ([Dokumentation](https://www.symcon.de/de/service/dokumentation/modulreferenz/verbrauch-in-kategorie/))  
 	Zeigt den Verbrauch in Prozent in Kategorie.
